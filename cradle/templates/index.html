@@ -53,23 +53,10 @@
       font-size: 1.2em;
       color: #00ff00; /* Green color for "Baby is not crying" message */
     }
-
-    .success-message {
-      text-align: center;
-      margin-top: 20px;
-      font-weight: 500;
-      font-size: 1.2em;
-      color: #00ff00; /* Green color for success message */
-    }
   </style>
 </head>
 <body>
   <h1>IoT Cradle System</h1>
-  <button onclick="getValues()">Get Values</button>
-
-  {% if is_button_clicked %}
-    <p class="success-message">Sensor data successfully updated!</p>
-  {% endif %}
 
   <table>
     <thead>
@@ -79,57 +66,27 @@
       </tr>
     </thead>
     <tbody>
-      {% if latest_data %}
-        <tr>
-          <td>Timestamp</td>
-          <td>{{ latest_data.timestamp }}</td>
-        </tr>
-        <tr>
-          <td>Temperature</td>
-          <td>{{ latest_data.temperature }}°C</td>
-        </tr>
-        <tr>
-          <td>Humidity</td>
-          <td>{{ latest_data.humidity }}%</td>
-        </tr>
-        <tr>
-          <td>Noise Level</td>
-          <td>{{ latest_data.noise_level }} dB</td>
-        </tr>
-      {% endif %}
+      <tr>
+        <td>Timestamp</td>
+        <td>{{ latest_data.timestamp }}</td>
+      </tr>
+      <tr>
+        <td>Temperature</td>
+        <td>{{ latest_data.temperature }}°C</td>
+      </tr>
+      <tr>
+        <td>Humidity</td>
+        <td>{{ latest_data.humidity }}%</td>
+      </tr>
+      <tr>
+        <td>Noise Level</td>
+        <td>{{ latest_data.noise_level }} dB</td>
+      </tr>
     </tbody>
   </table>
 
-  {% if latest_data %}
-    <p class="crying-message">{% if latest_data.is_crying %}Baby is crying!{% endif %}</p>
-    <p class="not-crying-message">{% if not latest_data.is_crying %}Baby is not crying.{% endif %}</p>
-  {% endif %}
+  <p class="crying-message">{% if latest_data.is_crying %}Baby is crying!{% endif %}</p>
+  <p class="not-crying-message">{% if not latest_data.is_crying %}Baby is not crying.{% endif %}</p>
 
-  <script>
-    function getValues() {
-      $.ajax({
-        url: '/get_values',
-        method: 'POST',
-        data: {
-          'csrfmiddlewaretoken': "{{ csrf_token }}"
-        },
-        success: function(data) {
-          // Update HTML elements with data from response
-          $('#timestamp').text(data.timestamp);
-          $('#temperature').text(data.temperature);
-          $('#humidity').text(data.humidity + '%');
-          $('#noise_level').text(data.noise_level + ' dB');
-  
-          // Update crying/not crying message
-          if (data.is_crying) {
-            $('.crying-message').show();
-            $('.not-crying-message').hide();
-          } else {
-            $('.crying-message').hide();
-            $('.not-crying-message').show();
-          }
-        }
-      });
-    }
-  </script>
-  
+</body>
+</html>

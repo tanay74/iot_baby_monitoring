@@ -19,8 +19,8 @@ from cradle.views import *
 
 urlpatterns = [
     path('',index,name="index"),
-    path('admin/', admin.site.urls),
-    path('get_values', get_values, name='get_values'),
+    path('admin/', admin.site.urls)
+    
 ]
     # path('',login_page,name="login_page")
 
