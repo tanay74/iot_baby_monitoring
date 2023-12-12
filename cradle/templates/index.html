@@ -13,6 +13,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      background-image: linear-gradient(to bottom, #3e4482, #733282); /* Custom gradient */
     }
 
     h1 {
@@ -20,6 +21,7 @@
       font-weight: 700;
       font-size: 2em;
       margin: 20px 0;
+      color: #fff; /* White text to contrast with background */
     }
 
     table {
@@ -27,6 +29,7 @@
       width: 50%;
       margin: 0 auto;
       border: 1px solid #ddd;
+      background-color: rgba(255, 255, 255, 0.8); /* White background with slight transparency */
     }
 
     th, td {
@@ -40,7 +43,7 @@
       margin-top: 20px;
       font-weight: 500;
       font-size: 1.2em;
-      color: #ff0000; 
+      color: #fa0000; /* Red color for "Baby is crying" message */
     }
 
     .not-crying-message {
@@ -48,12 +51,26 @@
       margin-top: 20px;
       font-weight: 500;
       font-size: 1.2em;
-      color:#00ff00;
+      color: #00ff00; /* Green color for "Baby is not crying" message */
+    }
+
+    .success-message {
+      text-align: center;
+      margin-top: 20px;
+      font-weight: 500;
+      font-size: 1.2em;
+      color: #00ff00; /* Green color for success message */
     }
   </style>
 </head>
 <body>
   <h1>IoT Cradle System</h1>
+  <button onclick="getValues()">Get Values</button>
+
+  {% if is_button_clicked %}
+    <p class="success-message">Sensor data successfully updated!</p>
+  {% endif %}
+
   <table>
     <thead>
       <tr>
@@ -62,26 +79,57 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Timestamp</td>
-        <td>{{ timestamp }}</td>
-      </tr>
-      <tr>
-        <td>Temperature</td>
-        <td>{{ temperature }}</td>
-      </tr>
-      <tr>
-        <td>Humidity</td>
-        <td>{{ humidity }}</td>
-      </tr>
-      <tr>
-        <td>Noise Level</td>
-        <td>{{ noise_level }} dB</td>
-      </tr>
+      {% if latest_data %}
+        <tr>
+          <td>Timestamp</td>
+          <td>{{ latest_data.timestamp }}</td>
+        </tr>
+        <tr>
+          <td>Temperature</td>
+          <td>{{ latest_data.temperature }}°C</td>
+        </tr>
+        <tr>
+          <td>Humidity</td>
+          <td>{{ latest_data.humidity }}%</td>
+        </tr>
+        <tr>
+          <td>Noise Level</td>
+          <td>{{ latest_data.noise_level }} dB</td>
+        </tr>
+      {% endif %}
     </tbody>
   </table>
 
-  <p class="crying-message"> {% if is_crying %}Baby is crying!{% endif %}</p>
-  <p class="not-crying-message"> {% if not is_crying %}Baby is not crying.{% endif %}</p>
-</body>
-</html>
+  {% if latest_data %}
+    <p class="crying-message">{% if latest_data.is_crying %}Baby is crying!{% endif %}</p>
+    <p class="not-crying-message">{% if not latest_data.is_crying %}Baby is not crying.{% endif %}</p>
+  {% endif %}
+
+  <script>
+    function getValues() {
+      $.ajax({
+        url: '/get_values',
+        method: 'POST',
+        data: {
+          'csrfmiddlewaretoken': "{{ csrf_token }}"
+        },
+        success: function(data) {
+          // Update HTML elements with data from response
+          $('#timestamp').text(data.timestamp);
+          $('#temperature').text(data.temperature);
+          $('#humidity').text(data.humidity + '%');
+          $('#noise_level').text(data.noise_level + ' dB');
+  
+          // Update crying/not crying message
+          if (data.is_crying) {
+            $('.crying-message').show();
+            $('.not-crying-message').hide();
+          } else {
+            $('.crying-message').hide();
+            $('.not-crying-message').show();
+          }
+        }
+      });
+    }
+  </script>
+  
