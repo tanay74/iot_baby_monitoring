@@ -31,7 +31,7 @@ def index(request):
     # Render the index template with the context dictionary
     return render(request, 'index.html', context)
 
-# def login_page(request):
-#     return render(request,'login.html')
+def login_page(request):
+    return render(request,'login.html')
 
     

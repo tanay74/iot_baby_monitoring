@@ -18,9 +18,10 @@ from django.urls import path
 from cradle.views import *
 
 urlpatterns = [
-    path('',index,name="index"),
-    path('admin/', admin.site.urls)
+    # path('',index,name="index"),
+    path('admin/', admin.site.urls),
     
-]
-    # path('',login_page,name="login_page")
 
+    path('',login_page,name="login_page"),
+    path('index/',index,name="index")
+]

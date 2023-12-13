@@ -53,10 +53,31 @@
       font-size: 1.2em;
       color: #00ff00; /* Green color for "Baby is not crying" message */
     }
+    button {
+        background-color: #4CAF50; /* Green color */
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 150px; /* Set a fixed width for consistent spacing */
+       margin: 0 5px;
+      }
+      
+      button:hover {
+        background-color: #3e8e41; /* Darker green on hover */
+      }
+      .button-container {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px;
+      }
+      
+      
   </style>
 </head>
 <body>
-  <h1>IoT Cradle System</h1>
+  <h1>Baby Monitoring System</h1>
 
   <table>
     <thead>
@@ -68,25 +89,34 @@
     <tbody>
       <tr>
         <td>Timestamp</td>
-        <td>{{ latest_data.timestamp }}</td>
+        <td>{{ timestamp }}</td>
       </tr>
       <tr>
         <td>Temperature</td>
-        <td>{{ latest_data.temperature }}°C</td>
+        <td>{{ temperature }}°C</td>
       </tr>
       <tr>
         <td>Humidity</td>
-        <td>{{ latest_data.humidity }}%</td>
+        <td>{{ humidity }}%</td>
       </tr>
       <tr>
         <td>Noise Level</td>
-        <td>{{ latest_data.noise_level }} dB</td>
+        <td>{{ noise_level }} dB</td>
       </tr>
     </tbody>
   </table>
 
-  <p class="crying-message">{% if latest_data.is_crying %}Baby is crying!{% endif %}</p>
-  <p class="not-crying-message">{% if not latest_data.is_crying %}Baby is not crying.{% endif %}</p>
+  <p class="crying-message">{% if is_crying %}Baby is crying!{% endif %}</p>
+  <p class="not-crying-message">{% if not is_crying %}Baby is not crying.{% endif %}</p>
+
+  {% comment %} <button onclick="window.location.href = '{% url 'admin:index' %}';">Check Database</button>
+  <button onclick="window.location.reload()">Check Status</button> {% endcomment %}
+  <div style="display: flex; justify-content: space-between; margin: 20px;">
+    <button onclick="window.location.href = '{% url 'admin:index' %}';">Check Database</button>
+    <button onclick="window.location.reload()">Check Status</button>
+  </div>
+  
+
 
 </body>
 </html>

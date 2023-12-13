@@ -7,7 +7,7 @@ from faker import Faker
 
 
 class SensorData(models.Model):
-    # user=models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
+    user=models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     temperature = models.FloatField()
     humidity = models.FloatField()
